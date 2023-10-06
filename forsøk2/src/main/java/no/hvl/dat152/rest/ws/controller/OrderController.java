@@ -46,11 +46,21 @@ public class OrderController {
 	public ResponseEntity<Object> getAllBorrowOrders(
 			@RequestParam(required = false) LocalDate expiry, 
 			@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "3") int size){
+			@RequestParam(defaultValue = "3") int size) {
 		
-		// TODO
+		List<Order> orders;
+		Pageable pagable = PageRequest.of(page, size);
 		
-		return null;
+		if(expiry == null) {
+			orders = orderService.findAllOrders();
+		} else {
+			orders = orderService.findByExpiryDate(expiry, pagable);
+		}
+		
+		if(orders.isEmpty())
+			return new ResponseEntity<>("No orders where found", HttpStatus.NO_CONTENT);
+		
+		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
 	
 	@GetMapping("/orders/{id}")
@@ -67,7 +77,6 @@ public class OrderController {
 		
 	}
 	
-	// Mulig håndtere NULL HER!!!!!
 	@PutMapping("/orders/{id}")
 	public ResponseEntity<Object> updateOrder(@PathVariable("id") Long id, @RequestBody Order order) 
 			throws OrderNotFoundException, UserNotFoundException{
@@ -80,9 +89,13 @@ public class OrderController {
 	}
 	
 	@DeleteMapping("/orders/{id}")
-	public ResponseEntity<Object> returnBookOrder(@PathVariable("id") Long id) throws OrderNotFoundException{
+	public ResponseEntity<Object> returnBookOrder(@PathVariable("id") Long id) throws OrderNotFoundException {
 		
-		// TODO
+		try {			
+			orderService.deleteOrder(id);
+		} catch(OrderNotFoundException e) {
+			return new ResponseEntity<>("Order with id "+id+" not found!", HttpStatus.NOT_FOUND);
+		}
 		
 		return new ResponseEntity<>("Order with id: '"+id+"' deleted!", HttpStatus.OK);
 	}

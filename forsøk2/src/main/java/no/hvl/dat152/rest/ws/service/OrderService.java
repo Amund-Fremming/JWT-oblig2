@@ -48,7 +48,8 @@ public class OrderService {
 	
 	// ER DENNE TYNN ?!?!?!?!?!??!?!?!??!
 	public List<Order> findByExpiryDate(LocalDate expiry, Pageable page){
-		return (List<Order>) orderRepository.findByExpiryBefore(expiry, page);
+		Page<Order> returnPage = orderRepository.findByExpiryBefore(expiry, page);
+		return returnPage.toList();
 	}
 	
 	public Order findOrder(Long id) throws OrderNotFoundException {
@@ -60,9 +61,12 @@ public class OrderService {
 	}
 	
 	public Order updateOrder(Order order, Long id) throws OrderNotFoundException {
+		order = orderRepository.findById(id)
+				.orElseThrow(()-> new OrderNotFoundException("Order with id: "+id+" not found in the order list!"));
 		
-		// TODO
+		order.setExpiry(order.getExpiry());
+		order.setIsbn(order.getIsbn());
 		
-		return null;			
+		return order;
 	}
 }
