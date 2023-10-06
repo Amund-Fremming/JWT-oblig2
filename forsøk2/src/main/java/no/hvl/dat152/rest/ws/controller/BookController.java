@@ -76,7 +76,7 @@ public class BookController {
 		
 		Set<Author> authors = bookService.findAuthorsByBookISBN(isbn);
 		
-		if(authors.isEmpty())
+		if(authors == null || authors.isEmpty())
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		
 		return new ResponseEntity<>(authors, HttpStatus.OK);		

@@ -46,7 +46,6 @@ public class OrderService {
 	}
 	
 	
-	// ER DENNE TYNN ?!?!?!?!?!??!?!?!??!
 	public List<Order> findByExpiryDate(LocalDate expiry, Pageable page){
 		Page<Order> returnPage = orderRepository.findByExpiryBefore(expiry, page);
 		return returnPage.toList();
