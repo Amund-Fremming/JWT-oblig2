@@ -4,6 +4,7 @@
 package no.hvl.dat152.rest.ws.service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,16 +36,35 @@ public class AdminUserService {
 	
 	public User deleteUserRole(Long id, String role) throws UserNotFoundException {
 		
-		// TODO
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new UserNotFoundException("User with id "+id+" was not found!"));
 		
-		return null;
+		Role userRole = roleRepository.findByName(role);
+		
+		Set<Role> roles = user.getRoles();
+		roles.remove(userRole);
+		user.setRoles(roles);
+		
+		userRepository.save(user);
+		
+		
+		return user;
 	}
 	
 	public User updateUserRole(Long id, String role) throws UserNotFoundException {
 		
-		// TODO
+		User user = userRepository.findById(id)
+				.orElseThrow(() -> new UserNotFoundException("User with id "+id+" was not found!"));
 		
-		return null;
+		Role userRole = roleRepository.findByName(role);
+		
+		Set<Role> roles = user.getRoles();
+		roles.add(userRole);
+		user.setRoles(roles);
+		
+		userRepository.save(user);
+		
+		return user;
 		
 	}
 	

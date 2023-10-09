@@ -65,7 +65,7 @@ public class AuthorController {
 		return new ResponseEntity<>(author.getBooks(), HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/authors")
 	public ResponseEntity<Object> createAuthor(@RequestBody Author author) {
 		Author created = authorService.saveAuthor(author);
@@ -73,7 +73,7 @@ public class AuthorController {
 		return new ResponseEntity<>(created, HttpStatus.CREATED);
 	}
 	
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/authors/{id}")
 	public ResponseEntity<Object> updateAuthors(@RequestBody Author author, @PathVariable("id") int id) {
 		Author uauthor;

@@ -31,16 +31,23 @@ public class UserService {
 	}
 	
 	public void deleteUser(Long id) throws UserNotFoundException {
+		User user = userRepository.findById(id)
+				.orElseThrow(()-> new UserNotFoundException("User with id: "+id+" not found"));
 		
-		// TODO
+		userRepository.delete(user);
 	}
 	
 	public User updateUser(User user, Long id) throws UserNotFoundException {
+		User userToUpdate = userRepository.findById(id)
+				.orElseThrow(()-> new UserNotFoundException("User with id: "+id+" not found"));
 		
-		// TODO
+		userToUpdate.setFirstname(user.getFirstname());
+		userToUpdate.setLastname(user.getLastname());
+		userToUpdate.setOrders(user.getOrders());
 		
-		return null;
+		userRepository.save(userToUpdate);
 		
+		return userToUpdate;
 	}
 	
 	public List<User> findAllUsers(){
@@ -66,9 +73,13 @@ public class UserService {
 	}
 	
 	public User createOrdersForUser(Long id, Order order) throws UserNotFoundException{
+		User user = userRepository.findById(id)
+				.orElseThrow(()-> new UserNotFoundException("User with id: "+id+" not found"));
 		
-		// TODO
+		user.addOrder(order);
 		
-		return null;
+		userRepository.save(user);
+		
+		return user;
 	}
 }

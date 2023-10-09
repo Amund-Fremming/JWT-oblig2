@@ -39,7 +39,7 @@ public class UserController {
 	private UserService userService;
 	
 	@GetMapping("/users")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Object> getUsers(){
 		
 		List<User> users = userService.findAllUsers();
@@ -79,6 +79,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/users")
+	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Object> createUser(@RequestBody User user){
 		
 		user = userService.saveUser(user);

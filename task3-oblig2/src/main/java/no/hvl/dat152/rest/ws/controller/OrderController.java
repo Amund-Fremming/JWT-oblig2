@@ -53,7 +53,7 @@ public class OrderController {
 	 * @return ResponseEntity<Object>
 	 */
 	@GetMapping("/orders")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Object> getAllBorrowOrders(
 			@RequestParam(required = false) LocalDate expiry, 
 			@RequestParam(defaultValue = "0") int page,

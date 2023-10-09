@@ -94,7 +94,7 @@ public class BookController {
 	}
 	
 	@PutMapping("/books/{isbn}")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Book> updateBook(@RequestBody Book book, @PathVariable("isbn") String isbn){
 		
 		Book nbook;
@@ -108,7 +108,7 @@ public class BookController {
 	}
 	
 	@DeleteMapping("/books/{isbn}")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<String> deleteBook(@PathVariable("isbn") String isbn) throws BookNotFoundException{
 		
 		bookService.deleteByISBN(isbn);
