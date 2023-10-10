@@ -44,7 +44,7 @@ public class UserController {
 		
 		List<User> users = userService.findAllUsers();
 		
-		if(users.isEmpty())
+		if(users == null || users.isEmpty())
 			
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		else
@@ -78,6 +78,7 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	/*
 	@PostMapping("/users")
 	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Object> createUser(@RequestBody User user){
@@ -87,6 +88,7 @@ public class UserController {
 		return new ResponseEntity<>(user, HttpStatus.CREATED);
 	}
 	
+	
 	@PutMapping("/users/{id}")
 	@PreAuthorize("hasAuthority('USER')")
 	public ResponseEntity<Object> updateUser(@RequestBody User user, 
@@ -95,7 +97,7 @@ public class UserController {
 		user = userService.updateUser(user, id);
 		
 		return new ResponseEntity<>(user, HttpStatus.OK);
-	}
+	}*/
 	
 	@GetMapping("/users/{id}/orders")
 	@PreAuthorize("hasAuthority('USER')")

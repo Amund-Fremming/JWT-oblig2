@@ -59,16 +59,16 @@ public class OrderController {
 			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "3") int size){
 		
-		List<Order> orders;
 		Pageable pagable = PageRequest.of(page, size);
+		List<Order> orders = orderService.findByExpiryDate(expiry, pagable);
 		
-		if(expiry == null) {
+		/*if(expiry == null) {
 			orders = orderService.findAllOrders();
 		} else {
 			orders = orderService.findByExpiryDate(expiry, pagable);
-		}
+		}*/
 		
-		if(orders.isEmpty())
+		if(orders == null || orders.isEmpty())
 			return new ResponseEntity<>("No orders where found", HttpStatus.NO_CONTENT);
 		
 		return new ResponseEntity<>(orders, HttpStatus.OK);
@@ -90,7 +90,7 @@ public class OrderController {
 	}
 	
 	@PutMapping("/orders/{id}")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Object> updateOrder(@PathVariable("id") Long id, @RequestBody Order order) 
 			throws OrderNotFoundException, UserNotFoundException, UnauthorizedOrderActionException{
 

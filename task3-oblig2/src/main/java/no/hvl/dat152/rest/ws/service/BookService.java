@@ -27,24 +27,32 @@ public class BookService {
 	@Autowired
 	private BookRepository bookRepository;
 	
-	
+	// Denne må endres, men får DB feil om man lagrer direkte
 	public Book saveBook(Book book) {
 		
-		return bookRepository.save(book);
+		Book toSave = findById(book.getId());
+		if(toSave != null)
+			return null;
 		
+		
+		return bookRepository.save(book);		
 	}
 	
 	public Book updateBook(Book book, String isbn) 
 			throws BookNotFoundException, UpdateBookFailedException {
 		
-		Book bookToUpdate = bookRepository.findByIsbn(isbn)
-				.orElseThrow(() -> new BookNotFoundException("Book with isbn = "+isbn+" not found!"));
+		Book bookToUpdate = findByISBN(isbn);
+				
 		
 		bookToUpdate.setAuthors(book.getAuthors());
-		bookToUpdate.setIsbn(book.getIsbn());
 		bookToUpdate.setTitle(book.getTitle());
+		bookToUpdate.setIsbn(book.getIsbn());
 		
-		bookRepository.save(bookToUpdate);
+		try {
+			bookToUpdate = bookRepository.save(bookToUpdate);
+		}catch(Exception e) {		// we can also collect the exception object and pass it to our custom exception
+			throw new UpdateBookFailedException("Update of book id = "+ bookToUpdate.getId() + " failed!");
+		}
 		
 		return bookToUpdate;
 	}
@@ -79,16 +87,15 @@ public class BookService {
 	
 	public Set<Author> findAuthorsByBookISBN(String isbn) throws BookNotFoundException{
 		
-		Book books = bookRepository.findByIsbn(isbn)
-				.orElseThrow(() -> new BookNotFoundException("Book with isbn = "+isbn+" not found!"));
-		
-		return books.getAuthors().stream().collect(Collectors.toSet());
+		Book books = findByISBN(isbn);
+		Set<Author> authorsForBook = books.getAuthors();
+				
+		return authorsForBook;
 		
 	}
 	
 	public void deleteByISBN(String isbn) throws BookNotFoundException {
-		Book book = bookRepository.findByIsbn(isbn)
-				.orElseThrow(() -> new BookNotFoundException("Book with ISBN = "+isbn+" not found!"));
+		Book book = findByISBN(isbn);
 		
 		bookRepository.delete(book);
 	}

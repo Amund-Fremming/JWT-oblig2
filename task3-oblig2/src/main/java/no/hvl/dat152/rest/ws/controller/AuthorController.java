@@ -36,6 +36,13 @@ public class AuthorController {
 	@PreAuthorize("hasAuthority('USER')")
 	@GetMapping("/authors")
 	public ResponseEntity<Object> getAllAuthors() {
+		
+		List<Author> authors = authorService.findAllAuthors();
+		
+		if(authors == null) {
+			return new ResponseEntity<>(authors, HttpStatus.NO_CONTENT);
+		}
+		
 		return new ResponseEntity<>(authorService.findAllAuthors(), HttpStatus.OK);
 	}
 	
@@ -73,8 +80,8 @@ public class AuthorController {
 		return new ResponseEntity<>(created, HttpStatus.CREATED);
 	}
 	
-	@PreAuthorize("hasAuthority('ADMIN')")
 	@PutMapping("/authors/{id}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Object> updateAuthors(@RequestBody Author author, @PathVariable("id") int id) {
 		Author uauthor;
 		try {
