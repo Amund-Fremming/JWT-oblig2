@@ -41,20 +41,19 @@ public class BookService {
 	public Book updateBook(Book book, String isbn) 
 			throws BookNotFoundException, UpdateBookFailedException {
 		
-		Book bookToUpdate = findByISBN(isbn);
-				
+		Book returnbook = findByISBN(isbn);
 		
-		bookToUpdate.setAuthors(book.getAuthors());
-		bookToUpdate.setTitle(book.getTitle());
-		bookToUpdate.setIsbn(book.getIsbn());
+		returnbook.setAuthors(book.getAuthors());
+		returnbook.setTitle(book.getTitle());
+		returnbook.setIsbn(book.getIsbn());
 		
 		try {
-			bookToUpdate = bookRepository.save(bookToUpdate);
+			returnbook = bookRepository.save(returnbook);
 		}catch(Exception e) {		// we can also collect the exception object and pass it to our custom exception
-			throw new UpdateBookFailedException("Update of book id = "+ bookToUpdate.getId() + " failed!");
+			throw new UpdateBookFailedException("Update of book id = "+ returnbook.getId() + " failed!");
 		}
 		
-		return bookToUpdate;
+		return returnbook;
 	}
 	
 	public List<Book> findAll(){

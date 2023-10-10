@@ -53,9 +53,7 @@ public class AdminUserService {
 	
 	public User updateUserRole(Long id, String role) throws UserNotFoundException {
 		
-		User user = userRepository.findById(id)
-				.orElseThrow(() -> new UserNotFoundException("User with id "+id+" was not found!"));
-		
+		User user = findUser(id);
 		Role userRole = roleRepository.findByName(role);
 		
 		Set<Role> roles = user.getRoles();
@@ -65,7 +63,6 @@ public class AdminUserService {
 		userRepository.save(user);
 		
 		return user;
-		
 	}
 	
 	public User findUser(Long id) throws UserNotFoundException {

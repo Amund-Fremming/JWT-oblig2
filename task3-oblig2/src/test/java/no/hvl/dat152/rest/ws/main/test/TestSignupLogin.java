@@ -47,16 +47,39 @@ class TestSignupLogin {
 		
 		AuthRequest authReq = new AuthRequest();
 		authReq.setEmail("berit@email.com");
-		authReq.setPassword("berit_pwd");	
+		authReq.setPassword("berit_pwd");
 		
+		AuthRequest authReq2 = new AuthRequest();
+		authReq2.setEmail("robert@email.com");
+		authReq2.setPassword("robert_pwd");
+		
+		AuthRequest authReq3 = new AuthRequest();
+		authReq3.setEmail("kristin@email.com");
+		authReq3.setPassword("kristin_pwd");
+
 		Response response = RestAssured.given()
 				.contentType(MediaType.APPLICATION_JSON_VALUE)
 				.body(authReq)
 				.post(API_ROOT+"/login");
+		
+		System.out.println("access_token(SUPER_ADMIN) = "+ response.jsonPath().get("accessToken").toString());
+		assertEquals(HttpStatus.OK.value(), response.getStatusCode());
+		assertTrue(response.jsonPath().get("accessToken").toString().contains("eyJhbGciOiJSUzI1NiJ9"));
+		
+		Response response2 = RestAssured.given()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.body(authReq2)
+				.post(API_ROOT+"/login");
+		
+		System.out.println("access_token(USER) = "+ response2.jsonPath().get("accessToken").toString());
 
-		System.out.println("access_token = "+ response.jsonPath().get("accessToken").toString());
-	    assertEquals(HttpStatus.OK.value(), response.getStatusCode());
-	    assertTrue(response.jsonPath().get("accessToken").toString().contains("eyJhbGciOiJSUzI1NiJ9"));
+		Response response3 = RestAssured.given()
+				.contentType(MediaType.APPLICATION_JSON_VALUE)
+				.body(authReq3)
+				.post(API_ROOT+"/login");
+		
+		System.out.println("access_token(ADMIN) = "+ response3.jsonPath().get("accessToken").toString());
+		
 
 	}
 

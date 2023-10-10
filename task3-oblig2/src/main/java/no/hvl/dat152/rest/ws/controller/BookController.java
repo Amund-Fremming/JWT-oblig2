@@ -85,7 +85,7 @@ public class BookController {
 	}
 	
 	@PostMapping("/books")
-	@PreAuthorize("hasAuthority('USER')")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<Book> createBook(@RequestBody Book book){
 		
 		Book nbook = bookService.saveBook(book);

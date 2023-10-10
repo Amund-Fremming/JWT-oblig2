@@ -62,14 +62,6 @@ public class OrderController {
 		Pageable pagable = PageRequest.of(page, size);
 		List<Order> orders = orderService.findByExpiryDate(expiry, pagable);
 		
-		/*if(expiry == null) {
-			orders = orderService.findAllOrders();
-		} else {
-			orders = orderService.findByExpiryDate(expiry, pagable);
-		}*/
-		
-		if(orders == null || orders.isEmpty())
-			return new ResponseEntity<>("No orders where found", HttpStatus.NO_CONTENT);
 		
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
